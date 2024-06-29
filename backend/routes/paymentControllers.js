@@ -33,8 +33,10 @@ router.post("/payment", async(req,res)=>{
                     
                 }
             },
-            success_url: `http://localhost:5100/success`, 
-            cancel_url: `http://localhost:5100/failed`,
+            // success_url: `http://localhost:5100/success`, 
+            // cancel_url: `http://localhost:5100/failed`,
+            success_url: `http://localhost:3000/success`, 
+            cancel_url: `http://localhost:3000/failed`,
         };
        
         const session = await stripe.checkout.sessions.create(params);

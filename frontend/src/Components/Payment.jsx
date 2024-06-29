@@ -1,5 +1,6 @@
 import React from 'react'
 import {loadStripe} from '@stripe/stripe-js';
+import { useEffect } from 'react';
 
 const Payment = () => {
 
@@ -44,7 +45,7 @@ const session = await response.json();
         sessionId: session.id
     })
     if(res.error){
-        console.log(result.error)
+        console.log(res.error)  
     }
     
         } catch (error) {
@@ -53,10 +54,12 @@ const session = await response.json();
         }
     }
 
+useEffect(()=>{
 
+})
   return (
-    <div style={{display:"flex",width:"100vw",justifyContent:"center",alignItems:"center",marginTop:"30px"}}>
-        <button className='btn btn-success' onClick={handlePayment} >Pay Now</button>
+    <div style={{display:"flex",width:"100%",justifyContent:"center",alignItems:"center",marginTop:"0px"}}>
+        <button className='btn btn-success' onClick={handlePayment} >Book Now</button>
     </div>
   )
 }

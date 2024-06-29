@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useLocation, useNavigate, useNavigation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addtoken } from '../Store/Slice/Userslice';
+import Payment from './Payment';
 
 const Singlepost = () => {
   const activeLabelStyles = {
@@ -151,8 +152,9 @@ const Singlepost = () => {
             {post.content}
           </Text>
           <HStack spacing={4}>
-            <Button variant="solid" colorScheme="blue">
-              See Pet
+            <Button>
+              {/* Buy Pet */}
+              <Payment></Payment>
             </Button>
           </HStack>
         </Box>

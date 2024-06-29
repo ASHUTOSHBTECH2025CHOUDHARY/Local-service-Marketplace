@@ -55,7 +55,7 @@ const Navbar = () => {
             </Link>
             <Link mx={"4px"} onClick={logout}>
               <Text fontSize="medium" fontWeight="bold"> LogOut</Text>
-          </Link>
+          </Link> 
         </Flex>
         }
     </Flex>

@@ -204,6 +204,7 @@ const Dashboard = () => {
             >
               Adopt it
             </Button>
+            
           </MotionBox>
           ))}
         </VStack>

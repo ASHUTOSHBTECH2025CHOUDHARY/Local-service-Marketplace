@@ -17,6 +17,8 @@
   import { Box } from "@chakra-ui/react";
   import "./App.css"
 import Payment from './Components/Payment'
+import Success from './Components/Success'
+import Failed from './Components/Failed'
   const App = () => {
     return (
       <Box bg="hsl(40, 35%, 80%)" minH="100vh" backgroundColor={'white'}>  
@@ -36,6 +38,8 @@ import Payment from './Components/Payment'
           <Route path='mysinglepost/:id' element={<Mysinglepost />} />
           <Route path='/seeuser/:id' element={<Seeuser />} />
           <Route path='/payment' element={<Payment />} />
+          <Route path='/success' element={<Success />} />
+          <Route path='/failed' element={<Failed />} />
         </Routes>
         <Footer />
       </Box>
