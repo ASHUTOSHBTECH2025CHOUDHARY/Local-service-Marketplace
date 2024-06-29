@@ -16,6 +16,7 @@
   import Footer from './Components/Footer'
   import { Box } from "@chakra-ui/react";
   import "./App.css"
+import Payment from './Components/Payment'
   const App = () => {
     return (
       <Box bg="hsl(40, 35%, 80%)" minH="100vh" backgroundColor={'white'}>  
@@ -34,6 +35,7 @@
           <Route path='/singlepost/:id' element={<Singlepost />} />
           <Route path='mysinglepost/:id' element={<Mysinglepost />} />
           <Route path='/seeuser/:id' element={<Seeuser />} />
+          <Route path='/payment' element={<Payment />} />
         </Routes>
         <Footer />
       </Box>
