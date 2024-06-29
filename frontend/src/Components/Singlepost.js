@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Button, Heading, Input, HStack, Image, Text, extendTheme, ChakraProvider, FormControl, FormLabel, Spacer, VStack
+  Box, Button,Container, Heading, Input, HStack, Image, Text, extendTheme, ChakraProvider, FormControl, FormLabel, Spacer, VStack,
+  Slider
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useLocation, useNavigate, useNavigation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { addtoken } from '../Store/Slice/Userslice';
-import Payment from './Payment';
 
 const Singlepost = () => {
   const activeLabelStyles = {
@@ -16,9 +18,10 @@ const Singlepost = () => {
   let token =localStorage.getItem("token")
   const dispatch=useDispatch()
   dispatch(addtoken(token))
+  const [receiverid,setrecieverid]=useState('');
   const userid=useSelector(state=>state.userdata._id)
-  console.log(userid,userid)
   const [firstname, setfirstname] = useState('');
+  const [Application,setApplication]=useState([]);
   const [lastname, setlastname] = useState('');
   const [content, setcontent] = useState('');
   const [email, setemail] = useState('');
@@ -26,6 +29,13 @@ const Singlepost = () => {
     setfirstname(e.target.value)
     console.log(firstname)
   }
+  const findallplicatioins=async()=>{
+    console.log("find application chala")
+    let res=await axios.get(`http://localhost:8080/api/v3/getapplicaton/${_id}`).catch((err)=>{
+        console.log(err)
+    })
+    return res.data.allapplication
+}
   const handlelastnname = (e) => {
     setlastname(e.target.value)
     console.log(lastname)
@@ -38,7 +48,14 @@ const Singlepost = () => {
     setcontent(e.target.value)
     console.log(content)
   }
-
+  const handleconversation=async()=>{
+    await axios.post(`http://localhost:8080/api/v4/createconversation`,{
+      senderid:_id,
+      receiverid:receiverid
+    })
+    navigate(`/messenger/:${_id}`)
+  }
+  
   const theme = extendTheme({
     components: {
       Form: {
@@ -78,13 +95,13 @@ const Singlepost = () => {
   const location = useLocation();
   const [post, setpost] = useState([]);
   let _id = '';
+  
   const logout = async () => {
     let res = await axios.get("http://localhost:8080/api/v1/logout", {
       withCredentials: true,
     });
     localStorage.clear()
     navigate("/login");
-    console.log(res);
   };
   const findpost = async () => {
     let res = await axios.get(`http://localhost:8080/api/v2/getthispost/${_id}`,{withCredentials:true}).catch((error) => {
@@ -92,9 +109,17 @@ const Singlepost = () => {
   console.log(error)
   });
     let data = res.data.post;
+    setrecieverid(data.userid)
+    // console.log(receiverid)
     return data;
   }
-
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
   const submithandler = async (e) => {
     e.preventDefault();
     let arr = location.pathname.split('/');
@@ -112,17 +137,18 @@ const Singlepost = () => {
     setlastname('');
     setemail('');
     setcontent('');
+    findallplicatioins().then((data)=>setApplication(data)).catch((err)=>console.log(err));
   }
 
   useEffect(() => {
-    console.log(location.pathname.split('/'));
     let arr = location.pathname.split('/');
     _id = arr[2];
-    console.log(_id);
     findpost().then((data) => setpost(data)).catch((err)=>console.log(err));
+    findallplicatioins().then((data)=>setApplication(data)).catch((err)=>console.log(err));
+    console.log(userid,_id)
   }, []);
-
   return (
+    <VStack>
         <HStack p={10}>
           <Box
           direction={{ base: "column", sm: "row" }}
@@ -151,12 +177,9 @@ const Singlepost = () => {
           <Text fontWeight="semibold" py="2">
             {post.content}
           </Text>
-          <HStack spacing={4}>
-            <Button>
-              {/* Buy Pet */}
-              <Payment></Payment>
-            </Button>
-          </HStack>
+          <Button onClick={handleconversation}>
+            Chat
+          </Button>
         </Box>
       </Box>
       <Box
@@ -168,25 +191,11 @@ const Singlepost = () => {
         p={4}
       >
         <ChakraProvider theme={theme}>
-          <Heading p={3}>Application Form</Heading>
+          <Heading p={3}>Review</Heading>
           <form onSubmit={submithandler}>
             <Box display="flex" justifyContent="space-between" flexWrap="wrap">
-              <FormControl variant="floating" isRequired width="calc(50% - 16px)" mr={3}>
-                <Input
-                  value={firstname}
-                  onChange={handlefirstname}
-                  placeholder=" "
-                />
-                <FormLabel>First Name</FormLabel>
-              </FormControl>
-              <FormControl variant="floating" isRequired width="calc(50% - 16px)">
-                <Input
-                  value={lastname}
-                  onChange={handlelastnname}
-                  placeholder=" "
-                />
-                <FormLabel>Last Name</FormLabel>
-              </FormControl>
+             
+              
               <FormControl variant="floating" isRequired width="100%" mt={3}>
                 <Input
                   value={email}
@@ -211,6 +220,73 @@ const Singlepost = () => {
         </ChakraProvider>
       </Box>
     </HStack>
+    <Box overflowX="auto" maxW="100%" padding={3}>
+    <Slider {...settings}>
+
+    
+    <HStack marginTop={0}>
+        {
+            Application.map((item,index)=>{
+                return <Box
+                key={index}
+                direction={{ base: "column", sm: "row" }}
+                boxShadow="md"
+                borderRadius="lg"
+                overflow="visible"
+                variant="outline"
+                width="100%"
+                position="relative"
+                minW="400px"
+                maxW="full" 
+                minH="200px" // Set maximum width // Set fixed height
+              >
+                <HStack px={4} py={2} spacing={4} width=" 100%" height="100%"> 
+                  <VStack align="start" spacing={2} flex="1" maxW="calc(100% - 200px)" py={4}>
+                    <Heading size="md">{item.firstname}</Heading>
+                    <Heading size="md">{item.lastname}</Heading>
+                    <Box maxW="100%" overflow="hidden" overflowY="auto">
+                      <Text>
+                          {item.content}
+                      </Text>
+                    </Box>
+                  </VStack>
+                </HStack>
+                    <Button
+                      variant="solid"
+                      colorScheme="blue"
+                      position="absolute"
+                      bottom="4"
+                      right="4"
+                      fontSize="sm" // Set font size
+                      width="100px" // Set fixed width
+                      height="40px" // Set fixed height
+                      lineHeight="40px" // Center button content vertically
+                      borderRadius="md" // Apply border radius
+                    >
+                      Adopt it
+                    </Button>
+                <Button
+                  variant="solid"
+                  colorScheme="blue"
+                  position="absolute"
+                  bottom="4"
+                  right="4"
+                  fontSize="sm" // Set font size
+                  width="100px" // Set fixed width
+                  height="40px" // Set fixed height
+                  lineHeight="40px" // Center button content vertically
+                  borderRadius="md" // Apply border radius
+                  
+                >
+                  Approve it
+                </Button>
+              </Box>
+            })
+        }
+        </HStack>
+        </Slider>
+        </Box> 
+    </VStack>
   );
 }
 

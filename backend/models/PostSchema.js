@@ -10,7 +10,7 @@ const Post_Schema = new mongoose.Schema({
   },
   categories: {
     type: String,
-    enums: ["cat", "dog", "birds", "others"],
+    enums: ["cat","dog","birds","others"],
     default: "dog",
   },
   userid:{
