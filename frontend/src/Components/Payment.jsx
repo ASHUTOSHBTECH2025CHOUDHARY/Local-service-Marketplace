@@ -23,7 +23,7 @@ const Payment = () => {
 
     const handlePayment =async () => {
         try {
-            const stripe = await loadStripe('pk_test_51PWuNoSDtSTagWPeEcInkemagrC5J2W1WH2zrCvAAUDjWp4FQfGMM3baZjtA8p9aODklPwIxRttj0jBjbKncAXcF00I2lQ0wGM');
+            const stripe = await loadStripe('');
 
 
 const response = await fetch("http://localhost:5000/payment",{

@@ -1,5 +1,5 @@
 
-const stripe = require("stripe")(`sk_test_51PWuNoSDtSTagWPe7Ljxl8XS9XK0Ltpn1ONQvjNWdwlEG61nTt4OLbV6bg0CmiJKxCZQ1b5gPc97HHV85SjUxq5z00OHh2zrL6`);
+const stripe = require("stripe")(``);
 const router = express.Router();
 
 router.post("/payment", async(req,res)=>{
@@ -33,8 +33,6 @@ router.post("/payment", async(req,res)=>{
                     
                 }
             },
-            // success_url: `http://localhost:5100/success`, 
-            // cancel_url: `http://localhost:5100/failed`,
             success_url: `http://localhost:3000/success`, 
             cancel_url: `http://localhost:3000/failed`,
         };
